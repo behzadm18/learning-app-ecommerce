@@ -11,25 +11,40 @@ Here's how to deploy it on CentOS systems:
 ```
 sudo yum install firewalld
 sudo service firewalld start
-sudo systemctl enable firewalld
+sudo systemctl enable firewalld # enable it so it starts when the systems starts
+```
+check if it is up and running
+```
+systemctl status firewalld
+```
+check the settings for the firewallD
+```
+firewalld --list-all
 ```
 
 ## Deploy and Configure Database
 
-1. Install MariaDB
+1. Install MariaDB (community forked version of mysql, everything is almost the same apaprt from the name)
 
 ```
 sudo yum install mariadb-server
-sudo vi /etc/my.cnf
+sudo vi /etc/my.cnf # no change, we leave the default settings
 sudo service mariadb start
 sudo systemctl enable mariadb
 ```
-
-2. Configure firewall for Database
+check if it is up and running
+```
+systemctl status mariadb
+```
+2. Configure firewall for Database (default mysql/mariadb port: 3306)
 
 ```
 sudo firewall-cmd --permanent --zone=public --add-port=3306/tcp
-sudo firewall-cmd --reload
+sudo firewall-cmd --reload  # without reload the changes do not take effect
+```
+check if the port is set correctly
+```
+firewall-cmd --list-all
 ```
 
 3. Configure Database
@@ -37,9 +52,11 @@ sudo firewall-cmd --reload
 ```
 $ mysql
 MariaDB > CREATE DATABASE ecomdb;
+MariaDB > show databases;    # to check if it is created
 MariaDB > CREATE USER 'ecomuser'@'localhost' IDENTIFIED BY 'ecompassword';
 MariaDB > GRANT ALL PRIVILEGES ON *.* TO 'ecomuser'@'localhost';
 MariaDB > FLUSH PRIVILEGES;
+MariaDB > exit
 ```
 
 > ON a multi-node setup remember to provide the IP address of the web server here: `'ecomuser'@'web-server-ip'`
