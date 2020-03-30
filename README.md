@@ -19,7 +19,7 @@ systemctl status firewalld
 ```
 check the settings for the firewallD
 ```
-firewalld --list-all
+firewall-cmd --list-all
 ```
 
 ## Deploy and Configure Database
@@ -64,9 +64,15 @@ MariaDB > exit
 4. Load Product Inventory Information to database
 
 ```
-mysql < db-load-script.sql
+mysql < db-load-script.sql   # get the db-load-script.sql from github learning-app-ecommerce/assets/db-load-script.sql
 ```
-
+to check if the data are in the database:
+```
+mysql
+use ecomdb;
+select * from products;
+exit
+```
 
 ## Deploy and Configure Web
 
@@ -80,7 +86,8 @@ sudo firewall-cmd --reload
 
 2. Configure httpd
 
-Change `DirectoryIndex index.html` to `DirectoryIndex index.php` to make the php page the default page
+Change `DirectoryIndex index.html` to `DirectoryIndex index.php` to make the php page the default page.
+The reason is that in this specific webapp we are deploying we used index.php
 
 ```
 sudo vi /etc/httpd/conf/httpd.conf
@@ -97,7 +104,7 @@ sudo systemctl enable httpd
 
 ```
 sudo yum install -y git
-git clone https://github.com/kodekloudhub/learning-app-ecommerce.git /var/www/html/
+git clone https://github.com/behzadm18/learning-app-ecommerce.git /var/www/html/
 ```
 
 5. Update index.php
@@ -117,5 +124,5 @@ Update [index.php](https://github.com/kodekloudhub/learning-app-ecommerce/blob/1
 6. Test
 
 ```
-curl http://localhost
+curl http://localhost # or prefereably open it in browser
 ```
